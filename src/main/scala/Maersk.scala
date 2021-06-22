@@ -33,32 +33,37 @@ object Maersk {
     //recorre llista segons index fer un match
     val prod:List[Producto] =pL
     var lC: List[ContenedorCarga] = List[ContenedorCarga]()
-    prod match{
-      case Nil=> throw AnyProducts()
-      case l if(l.length<=nContenedores) => throw LeftOverContainers(nContenedores)
-      case _ => {
-        var aux: List[Producto] = List[Producto]()
+    try {
+      prod match{
+        case Nil=> throw AnyProducts()
+        case l if(l.length<=nContenedores) => throw LeftOverContainers(nContenedores)
+        case _ => {
+          var aux: List[Producto] = List[Producto]()
 
-        var i:Int=0
-        pL.foreach((producto) => {
-          i+=1
-          aux = producto :: aux
-          if ((i.toFloat/ nContenedores.toFloat ) == 1) {
-            val id="ID-"+i.toString
-            var c = new ContenedorCarga(aux, id)
-            lC = c :: lC
-            aux = List[Producto]()
+          var i:Int=0
+          pL.foreach((producto) => {
+            i+=1
+            aux = producto :: aux
+            if ((i.toFloat/ nContenedores.toFloat ) == 1) {
+              val id="ID-"+i.toString
+              var c = new ContenedorCarga(aux, id)
+              lC = c :: lC
+              aux = List[Producto]()
+            }
+          })
+
+          if (aux.length != 0) {
+            val id="ID-"+pL.length.toString
+            var lastC = new ContenedorCarga(aux, id)
+            lC = lastC :: lC
           }
-        })
 
-        if (aux.length != 0) {
-          val id="ID-"+pL.length.toString
-          var lastC = new ContenedorCarga(aux, id)
-          lC = lastC :: lC
         }
-
       }
+    } catch{
+      case eLOC:LeftOverContainers => println(eLOC)
     }
+
     lC
   }
 
@@ -69,9 +74,8 @@ object Maersk {
     var ruta1 = new RutaMaritima(this.puertos(0),this.puertos(1),this.flota(0),productos,2)
     ruta1.realizarRuta(llenarContenedores)
     var ruta2 = new RutaMaritima(this.puertos(2),this.puertos(3),this.flota(2),productos,5)
-    ruta1.realizarRuta(llenarContenedores)
-    var ruta3 = new RutaMaritima(this.puertos(2),this.puertos(3),this.flota(1),productos,5)
-    ruta1.realizarRuta(llenarContenedores)
-
+    ruta2.realizarRuta(llenarContenedores)
+    var ruta3 = new RutaMaritima(this.puertos(2),this.puertos(3),this.flota(1),productos,2)
+    ruta3.realizarRuta(llenarContenedores)
   }
 }

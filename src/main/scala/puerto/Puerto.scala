@@ -3,6 +3,9 @@ package puerto
 import Barcos.Barco
 import excepciones.{ShipIsNotInThisPort, ShipIsYetInThisPort}
 
+/*
+Clase donde definimos el nombre del Puerto y su ubicación
+ */
 class Puerto(n:String,s:String){
   val nombre:String=n
   val situacion:String=s

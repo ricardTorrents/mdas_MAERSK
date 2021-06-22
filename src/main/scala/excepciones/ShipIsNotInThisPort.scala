@@ -1,3 +1,3 @@
 package excepciones
 
-case class ShipIsNotInThisPort(matricula:String) extends Exception(s"El barco $matricula no esta en estue puerto" )
+case class ShipIsNotInThisPort(matricula:String) extends Exception(s"El barco $matricula no esta en este puerto" )

@@ -6,6 +6,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
+
+/*
+Clase donde definimos la ruta maritima que iniciará un barco
+ */
+
 class RutaMaritima(pI:Puerto,pF:Puerto,b:Buque,lP:List[Producto],nC:Int) {
   val puertoInicio:Puerto=pI
   val puertoFinal:Puerto=pF
@@ -57,10 +62,10 @@ class RutaMaritima(pI:Puerto,pF:Puerto,b:Buque,lP:List[Producto],nC:Int) {
       val contenedores:List[ContenedorCarga]=llenarContenedores(this.listaProductos,this.n_contenedores)
 
       try {
-        println("Cargando el barco")
+        println(s"Cargando el barco: ${barco.nombre}")
         cargarBarco(contenedores)
         var carga=this.barco.carga
-        println(s"Carga del barco $carga")
+        println(s"El barco ha sido cargado con la siguiente carga: $carga")
         println("Iniciando ruta")
         iniciarRuta()
         val tiempoNav= navegar()
@@ -70,14 +75,14 @@ class RutaMaritima(pI:Puerto,pF:Puerto,b:Buque,lP:List[Producto],nC:Int) {
         result.onComplete {
           case Success(value)=>{
             val tNav=value/1000
-            println(s"El tiempo de navegacion es de $tNav segundos")
+            println(s"El tiempo de navegación es de $tNav segundos")
             finalizarRuta()
-            println("Se a llegado al destino")
+            println("Se ha llegado al puerto destino")
             descargarBarco((contenedores))
             carga=this.barco.carga
-            println(s"Carga del barco : $carga")
+            println(s"Carga del barco después de la descarga : $carga")
           }
-          case Failure(ex)=>println("El barco a naufragado.")
+          case Failure(ex)=>println("El barco ha naufragado.")
         }// AWait
         Thread.sleep(10000)
 
